@@ -12,19 +12,19 @@
 
 - name: Add firewalld rules for services from vars
   firewalld:
-    service={{ item.service }}
-    zone={{ item.zone | default ("public") }}
-    permanent={{ item.permanent | default (True) }}
-    state={{ item.state | default ("enabled") }}
-  with_items: "{{ firewalld_allow_services }}"
+    service: "{{ item.service }}"
+    zone: "{{ item.zone | default('public') }}"
+    permanent: "{{ item.permanent | default(True) }}"
+    state: "{{ item.state | default('enabled') }}"
+  loop: "{{ firewalld_allow_services|flatten(levels=1) }}"
   notify: firewalld complete reload
   when: firewalld_disable == false
 - name: Add firewalld rules for ports from vars
   firewalld:
-    port={{ item.port }}
-    zone={{ item.zone | default ("public") }}
-    permanent={{ item.permanent | default (True) }}
-    state={{ item.state | default ("enabled") }}
+    port: "{{ item.port }}"
+    zone: "{{ item.zone | default('public') }}"
+    permanent: "{{ item.permanent | default(True) }}"
+    state: "{{ item.state | default('enabled') }}"
   with_items: "{{ firewalld_allow_ports }}"
   notify: firewalld complete reload
   when: firewalld_disable == false
